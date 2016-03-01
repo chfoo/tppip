@@ -131,8 +131,8 @@ def analyze_image(filename, diff_threshold, max_threshold, debug_image=False):
             processed_image.paste(row_overlay, (snippet_x, y2), diff_image.convert('L'))
 
         diff_stats = PIL.ImageStat.Stat(diff_image)
-        mean_value = sum(diff_stats.mean) / 3
-        max_value = sum(item[1] for item in diff_stats.extrema) / 3
+        mean_value = sum(diff_stats.mean[:3]) / 3
+        max_value = sum(item[1] for item in diff_stats.extrema[:3]) / 3
         token_detected = mean_value > diff_threshold and max_value > max_threshold
 
         result_doc['buttons'][button_label] = {
