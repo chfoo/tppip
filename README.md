@@ -20,65 +20,31 @@ Will output something like:
         {
           "buttons": {
             "a": {
-              "pixel_diff_max": 12.0,
-              "pixel_diff_mean": 3.392857142857143,
+              "pixel_diff_max": 0.0,
+              "pixel_diff_mean": 0.0,
               "row": 0,
               "token_detected": false
             },
             "b": {
-              "pixel_diff_max": 7.0,
-              "pixel_diff_mean": 1.607142857142857,
+              "pixel_diff_max": 0.0,
+              "pixel_diff_mean": 0.0,
               "row": 1,
               "token_detected": false
             },
             "down": {
-              "pixel_diff_max": 5.0,
-              "pixel_diff_mean": 0.2857142857142857,
+              "pixel_diff_max": 0.0,
+              "pixel_diff_mean": 0.0,
               "row": 3,
               "token_detected": false
             },
-            "l": {
-              "pixel_diff_max": 0.0,
-              "pixel_diff_mean": 0.0,
-              "row": 8,
-              "token_detected": false
-            },
-            "left": {
-              "pixel_diff_max": 0.0,
-              "pixel_diff_mean": 0.0,
-              "row": 4,
-              "token_detected": false
-            },
-            "r": {
-              "pixel_diff_max": 0.0,
-              "pixel_diff_mean": 0.0,
-              "row": 9,
-              "token_detected": false
-            },
-            "right": {
-              "pixel_diff_max": 0.0,
-              "pixel_diff_mean": 0.0,
-              "row": 5,
-              "token_detected": false
-            },
+            [...]
             "select": {
-              "pixel_diff_max": 0.0,
-              "pixel_diff_mean": 0.0,
+              "pixel_diff_max": 255.0,
+              "pixel_diff_mean": 112.78571428571429,
               "row": 7,
-              "token_detected": false
-            },
-            "start": {
-              "pixel_diff_max": 0.0,
-              "pixel_diff_mean": 0.0,
-              "row": 6,
-              "token_detected": false
-            },
-            "up": {
-              "pixel_diff_max": 0.0,
-              "pixel_diff_mean": 0.0,
-              "row": 2,
-              "token_detected": false
+              "token_detected": true
             }
           },
-          "filename": "/tmp/tmp2os59co9-tppip/1456803932.png"
+          "filename": "/tmp/tmp7g3hs5sv-tppip/1456803062.png"
         }
+
