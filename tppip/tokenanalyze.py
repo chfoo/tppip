@@ -6,6 +6,7 @@ import tempfile
 import atexit
 import time
 import math
+import shutil
 
 import PIL.Image
 import PIL.ImageFilter
@@ -21,6 +22,7 @@ def main():
     arg_parser.add_argument('--max-threshold', type=int, default=150)
     arg_parser.add_argument('--positive-only', action='store_true')
     arg_parser.add_argument('--concise', action='store_true')
+    arg_parser.add_argument('--save-screenshot-filename')
     args = arg_parser.parse_args()
 
     if not args.image_filename:
@@ -48,6 +50,9 @@ def main():
 
         ffmpeg_proc.communicate()
         livestreamer_proc.terminate()
+
+        if args.save_screenshot_filename:
+            shutil.copy2(temp_filename, args.save_screenshot_filename)
 
         filenames = [temp_filename]
     else:
