@@ -12,7 +12,7 @@ Requirements
 
 Running:
 
-        python3 -m tppip.tokenanalysis
+        python3 -m tppip.tokenanalyze
 
 
 Will output something like:
