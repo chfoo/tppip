@@ -29,27 +29,15 @@ def main():
         temp_dir = tempfile.TemporaryDirectory(suffix='-tppip')
         temp_filename = os.path.join(temp_dir.name,
                                      str(int(time.time())) + '.png')
-        livestreamer_proc = subprocess.Popen([
-            'livestreamer', 'http://www.twitch.tv/twitchplayspokemon',
-            'best', '--stdout'], stdout=subprocess.PIPE)
+        url = subprocess.check_output([
+            'livestreamer', 'twitch.tv/twitchplayspokemon',
+            'best',
+            '--stream-url', '--hls-live-edge', '1',
+            ]).decode('utf-8').strip()
 
-        ffmpeg_proc = subprocess.Popen([
-            'ffmpeg', '-i', '-', '-vframes', '1', '-f', 'image2', temp_filename
-        ], stdin=livestreamer_proc.stdout)
-
-        @atexit.register
-        def cleanup():
-            try:
-                livestreamer_proc.terminate()
-            except OSError:
-                pass
-            try:
-                ffmpeg_proc.terminate()
-            except OSError:
-                pass
-
-        ffmpeg_proc.communicate()
-        livestreamer_proc.terminate()
+        subprocess.check_call([
+            'ffmpeg', '-i', url, '-vframes', '1', '-f', 'image2', temp_filename
+        ])
 
         if args.save_screenshot_filename:
             shutil.copy2(temp_filename, args.save_screenshot_filename)
