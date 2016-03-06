@@ -1,9 +1,9 @@
 import argparse
 import json
+import logging
 import os
 import subprocess
 import tempfile
-import atexit
 import time
 import math
 import shutil
@@ -12,6 +12,9 @@ import PIL.Image
 import PIL.ImageFilter
 import PIL.ImageChops
 import PIL.ImageStat
+
+
+_logger = logging.getLogger(__name__)
 
 
 def main():
@@ -23,17 +26,16 @@ def main():
     arg_parser.add_argument('--positive-only', action='store_true')
     arg_parser.add_argument('--concise', action='store_true')
     arg_parser.add_argument('--save-screenshot-filename')
+    arg_parser.add_argument('--url-cache-filename')
     args = arg_parser.parse_args()
+    logging.basicConfig(level=logging.INFO)
 
     if not args.image_filename:
         temp_dir = tempfile.TemporaryDirectory(suffix='-tppip')
         temp_filename = os.path.join(temp_dir.name,
                                      str(int(time.time())) + '.png')
-        url = subprocess.check_output([
-            'livestreamer', 'twitch.tv/twitchplayspokemon',
-            'best',
-            '--stream-url', '--hls-live-edge', '1',
-            ]).decode('utf-8').strip()
+
+        url = get_stream_url(args.url_cache_filename)
 
         subprocess.check_call([
             'ffmpeg', '-i', url, '-vframes', '1', '-f', 'image2', temp_filename
@@ -47,6 +49,8 @@ def main():
         filenames = args.image_filename
 
     for filename in filenames:
+        _logger.info('Analyzing %s', filename)
+
         result_doc = analyze_image(
             filename, args.diff_threshold, args.max_threshold,
             debug_image=args.debug_image)
@@ -69,6 +73,30 @@ def main():
                 print(result_doc['filename'], diff_mean_value, diff_max_value)
             else:
                 print(json.dumps(result_doc))
+
+
+def get_stream_url(cache_filename=None):
+    _logger.info('Getting stream url...')
+
+    if cache_filename and os.path.isfile(cache_filename) and \
+            time.time() - os.path.getmtime(cache_filename) < 3600:
+        with open(cache_filename) as file:
+            _logger.info('Got stream url from cache')
+            return file.read().strip()
+
+    url = subprocess.check_output([
+        'livestreamer', 'twitch.tv/twitchplayspokemon',
+        'best',
+        '--stream-url', '--hls-live-edge', '1',
+    ]).decode('utf-8').strip()
+
+    if cache_filename:
+        with open(cache_filename, 'w') as file:
+            file.write(url)
+
+    _logger.info('Got stream url')
+
+    return url
 
 
 def analyze_image(filename, diff_threshold, max_threshold, debug_image=False):
