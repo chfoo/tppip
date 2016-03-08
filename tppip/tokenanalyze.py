@@ -42,7 +42,9 @@ def main():
         ])
 
         if args.save_screenshot_filename:
-            shutil.copy2(temp_filename, args.save_screenshot_filename)
+            dest_new_filename = args.save_screenshot_filename + '-new'
+            shutil.copy2(temp_filename, dest_new_filename)
+            os.rename(dest_new_filename, args.save_screenshot_filename)
 
         filenames = [temp_filename]
     else:
