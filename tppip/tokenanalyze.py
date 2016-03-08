@@ -79,7 +79,7 @@ def get_stream_url(cache_filename=None):
     _logger.info('Getting stream url...')
 
     if cache_filename and os.path.isfile(cache_filename) and \
-            time.time() - os.path.getmtime(cache_filename) < 3600:
+            time.time() - os.path.getmtime(cache_filename) < 60 * 5:
         with open(cache_filename) as file:
             _logger.info('Got stream url from cache')
             return file.read().strip()
