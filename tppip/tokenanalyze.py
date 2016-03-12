@@ -21,7 +21,7 @@ def main():
     arg_parser = argparse.ArgumentParser()
     arg_parser.add_argument('image_filename', nargs='*')
     arg_parser.add_argument('--debug-image', action='store_true')
-    arg_parser.add_argument('--diff-threshold', type=int, default=20)
+    arg_parser.add_argument('--diff-threshold', type=int, default=10)
     arg_parser.add_argument('--max-threshold', type=int, default=150)
     arg_parser.add_argument('--positive-only', action='store_true')
     arg_parser.add_argument('--concise', action='store_true')
@@ -113,6 +113,7 @@ def analyze_image(filename, diff_threshold, max_threshold, debug_image=False):
 
     processed_image = image.crop(
         (crop_x, crop_y, crop_x + crop_width, crop_y + crop_height))
+    processed_image = PIL.Image.eval(processed_image, lambda x: 0 if x < 175 else x)
     # processed_image = processed_image.filter(PIL.ImageFilter.SMOOTH_MORE)
     processed_image = processed_image.filter(PIL.ImageFilter.FIND_EDGES)
 
