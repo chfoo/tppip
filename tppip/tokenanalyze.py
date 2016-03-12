@@ -101,11 +101,33 @@ def get_stream_url(cache_filename=None):
     return url
 
 
-def analyze_image(filename, diff_threshold, max_threshold, debug_image=False):
+def analyze_image(filename, diff_threshold, max_threshold, debug_image=False,
+                  sanity_threshold=30):
     image = PIL.Image.open(filename)
 
     scale = image.size[0] / 1920
 
+    # Check for black pixels above timer
+    sanity_check_x = round(1526 * scale)
+    sanity_check_y = round(920 * scale)
+    sanity_check_width = round(60 * scale)
+    sanity_check_height = round(4 * scale)
+
+    sanity_sample_image = image.crop(
+        (sanity_check_x, sanity_check_y,
+         sanity_check_x + sanity_check_width,
+         sanity_check_y + sanity_check_height))
+
+    sanity_stats = PIL.ImageStat.Stat(sanity_sample_image)
+    sanity_mean_value = sum(sanity_stats.mean[:3]) / 3
+
+    sanity_ok = sanity_mean_value <= sanity_threshold
+
+    if not sanity_ok:
+        _logger.warning('%s does not appear to be a sidegame image (value %s)',
+                        filename, sanity_mean_value)
+
+    # Crop for the space where token bribes appear
     crop_x = round(1616 * scale)
     crop_y = round(916 * scale)
     crop_width = round(16 * scale)
@@ -157,7 +179,7 @@ def analyze_image(filename, diff_threshold, max_threshold, debug_image=False):
         diff_stats = PIL.ImageStat.Stat(diff_image)
         mean_value = sum(diff_stats.mean[:3]) / 3
         max_value = sum(item[1] for item in diff_stats.extrema[:3]) / 3
-        token_detected = mean_value > diff_threshold and max_value > max_threshold
+        token_detected = mean_value > diff_threshold and max_value > max_threshold and sanity_ok
 
         result_doc['buttons'][button_label] = {
             'row': row,
