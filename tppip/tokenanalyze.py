@@ -21,7 +21,7 @@ def main():
     arg_parser = argparse.ArgumentParser()
     arg_parser.add_argument('image_filename', nargs='*')
     arg_parser.add_argument('--debug-image', action='store_true')
-    arg_parser.add_argument('--diff-threshold', type=int, default=10)
+    arg_parser.add_argument('--diff-threshold', type=int, default=5)
     arg_parser.add_argument('--max-threshold', type=int, default=150)
     arg_parser.add_argument('--positive-only', action='store_true')
     arg_parser.add_argument('--concise', action='store_true')
