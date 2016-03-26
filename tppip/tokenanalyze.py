@@ -145,7 +145,8 @@ def analyze_image(filename, diff_threshold, max_threshold, debug_image=False,
 
     result_doc = {
         'filename': filename,
-        'buttons': {}
+        'buttons': {},
+        'sanity_mean_value': sanity_mean_value,
     }
 
     snippet_width = crop_width - 2
