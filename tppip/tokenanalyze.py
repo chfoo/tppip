@@ -128,7 +128,7 @@ def analyze_image(filename, diff_threshold, max_threshold, debug_image=False,
                         filename, sanity_mean_value)
 
     # Crop for the space where token bribes appear
-    crop_x = round(1616 * scale)
+    crop_x = round(1622 * scale)
     crop_y = round(916 * scale)
     crop_width = round(16 * scale)
     crop_height = round(160 * scale)
