@@ -136,6 +136,10 @@ def analyze_image(filename, diff_threshold, max_threshold, debug_image=False,
     processed_image = image.crop(
         (crop_x, crop_y, crop_x + crop_width, crop_y + crop_height))
     processed_image = PIL.Image.eval(processed_image, lambda x: 0 if x < 50 else x)
+
+    if debug_image:
+        processed_image.save(filename + '.debug-crop.png', 'PNG')
+
     processed_image = processed_image.filter(PIL.ImageFilter.FIND_EDGES)
 
     row_height = crop_height / 10
